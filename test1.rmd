@@ -1,0 +1,54 @@
+---
+title: "Coronavirus (COVID-19) Cases Summary"
+output: ioslides_presentation
+author: Shaopeng Li
+date: 08/03/2020
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## COVID-19 pandemic
+
+The COVID‑19 pandemic, also known as the coronavirus pandemic, is an ongoing global pandemic of coronavirus disease 2019 (COVID‑19), caused by severe acute respiratory syndrome coronavirus 2 (SARS‑CoV‑2). The outbreak was first identified in December 2019 in Wuhan, China.The World Health Organization declared the outbreak a Public Health Emergency of International Concern on 30 January 2020 and a pandemic on 11 March.
+
+**From Wikipedia, the free encyclopedia**
+
+## Symptoms
+
+People with COVID-19 have had a wide range of symptoms reported – ranging from mild symptoms to severe illness. Symptoms may appear 2-14 days after exposure to the virus. People with these symptoms may have COVID-19:
+
+- Fever or chills
+- Cough
+- Shortness of breath or difficulty breathing
+- Fatigue
+- Muscle or body aches
+- Headache
+
+## Global Reported Cases
+```{r,echo=FALSE,message=FALSE}
+library(dplyr)
+library(plotly)
+require(devtools)
+covid19toatl <- read.csv("C:/Users/shaopeng.li/Downloads/owid_covid_data.csv",na.strings = "")
+covid19us <- filter(covid19toatl,continent=="North America",location=="United States")%>%
+  arrange(date)
+covid19toatl<-covid19toatl[!is.na(covid19toatl$continent),]%>%group_by(continent,date)%>%summarise(sum(total_cases))%>%mutate(totalcase=`sum(total_cases)`)
+plot_ly(as.data.frame(covid19toatl), x = ~date, y = ~totalcase, color = ~continent) %>%
+  add_trace(colors = "Set1", type = "scatter", mode = "lines",connectgaps=TRUE) %>%
+  layout(xaxis = list(title = "Date"), yaxis = list(title = "Total Cases"))
+```
+
+## U.S. Reported Cases
+```{r cars, echo=FALSE,message=FALSE}
+plot_ly(data=covid19us, x = ~date, y = ~total_cases)%>%
+  layout(xaxis = list(title = "Date"), yaxis = list(title = "Total Cases"))
+```
+
+## Prevent Getting Sick
+
+- Cleaning and Disinfecting Your Home
+- Social Distancing
+- Masks
+- Wearing Gloves
